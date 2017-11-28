@@ -28,6 +28,7 @@ class ContentController extends CommonController
     {
         if ($tid) {
             $data = $users = DB::table('lessons')
+                ->select('lessons.*')
                 ->join('tag_lessons', 'lessons.id', '=', 'tag_lessons.lesson_id')
                 ->where('tag_id', $tid)
                 ->get();

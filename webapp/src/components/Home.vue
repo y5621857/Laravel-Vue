@@ -18,50 +18,28 @@
     
     <!--推荐视频-->
     <h2>推荐视频</h2>
-    
     <div id="recommend">
-      <a href="">
-        <img src="static/images/4.jpg" alt=""/>
+      <router-link :to="{name:'Page',params:{lessonId:item.id}}" v-for="(item,index) in commendLesson" key="index">
+        <img :src="item.preview" alt="preview"/>
         <i class="iconfont icon-bofang"></i>
-        <span class="time">22:56</span>
-        <span class="title">谷歌：没有扫描仪也能</span>
-      </a>
-      <a href="">
-        <img src="static/images/5.jpg" alt=""/>
-        <i class="iconfont icon-bofang"></i>
-        <span class="time">22:56</span>
-        <span class="title">谷歌：没有扫描仪也能</span>
-      </a>
-      <a href="">
-        <img src="static/images/6.jpg" alt=""/>
-        <i class="iconfont icon-bofang"></i>
-        <span class="time">22:56</span>
-        <span class="title">谷歌：没有扫描仪也能</span>
-      </a>
-      <a href="">
-        <img src="static/images/7.jpg" alt=""/>
-        <i class="iconfont icon-bofang"></i>
-        <span class="time">22:56</span>
-        <span class="title">谷歌：没有扫描仪也能</span>
-      </a>
+        <span class="time">{{item.created_at}}</span>
+        <span class="title">{{item.title}}</span>
+      </router-link>
     </div>
     <!--推荐视频结束-->
-    
     <a href="" class="more">MORE ></a>
     
-    
     <!--今日推荐-->
-    <h2>热门推荐视频</h2>
-    
+    <h2>热门视频</h2>
     <div class="today">
       <div class="pic">
-        <a href=""><img src="static/images/8.jpg"/></a>
-        <a href=""><img src="static/images/9.jpg"/></a>
-        <a href=""><img src="static/images/10.jpg"/></a>
+        <router-link :to="{name:'Page',params:{lessonId:item.id}}" v-for="(item,index) in hotLesson" key="index">
+          <img :src="item.preview"/>
+        </router-link>
       </div>
     </div>
     <!--今日推荐结束-->
-    
+    <div style="height: 100px;"></div>
     <!--底部固定导航-->
     <ul id="bottom">
       <li class="cur">
@@ -73,7 +51,7 @@
         </a>
       </li>
       <li>
-        <router-link :to="{path:'/video'}">
+        <router-link :to="{name:'Video'}">
           <i class="iconfont icon-icon02"></i>
           <span>视频</span>
         </router-link>
@@ -85,8 +63,26 @@
 <script>
   export default {
     name: 'Home',
+    mounted() {
+      var commendLesson_href = 'http://laravel.dev/api/commendLesson/4'
+      var hotLesson_href = 'http://laravel.dev/api/hotLesson/3'
+      
+      //TODO 推荐课程
+      this.axios.get(commendLesson_href).then((res) => {
+        //console.log(res.data)
+        this.commendLesson = res.data.data;
+      })
+      
+      //TODO 热门课程
+      this.axios.get(hotLesson_href).then((res) => {
+        //console.log(res.data)
+        this.hotLesson = res.data.data;
+      })
+    },
     data() {
       return {
+        commendLesson: [], //TODO 推荐课程
+        hotLesson: [], //TODO 热门课程
         slides: [
           {id: 1, path: '/static/images/1.jpg'},
           {id: 2, path: '/static/images/2.jpg'},
@@ -96,7 +92,7 @@
         swiperOption: {
           // swiper options 所有的配置同swiper官方api配置
           autoplay: 3000,
-          loop:true,
+          loop: true,
           grabCursor: true,
           setWrapperSize: true,
           autoHeight: true,
@@ -107,16 +103,6 @@
           scrollbar: '.swiper-scrollbar',
           mousewheelControl: true,
           observeParents: true,
-          // if you need use plugins in the swiper, you can config in here like this
-          // 如果自行设计了插件，那么插件的一些配置相关参数，也应该出现在这个对象中，如下debugger
-          debugger: true,
-          // swiper callbacks
-          // swiper的各种回调函数也可以出现在这个对象中，和swiper官方一样
-          onTransitionStart (swiper) {
-            console.log(swiper)
-          }
-          // more Swiper configs and callbacks...
-          // ...
         }
       }
     }

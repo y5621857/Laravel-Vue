@@ -1,41 +1,21 @@
 <template>
   <div>
     <!--视频-->
-    <video src="static/images/big_buck_bunny.mp4" controls="controls" poster="static/images/510.jpg"></video>
+    <video :src="current.path" controls="controls" height="250px"
+           poster="/static/images/510.jpg"></video>
     <!--视频结束-->
     
     <h1>10 导航条样式的设置</h1>
     
     <ul id="list">
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li class="cur"><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
-      <li><a href="">07 w3c规范 创建网页的方法</a></li>
-      <li><a href="">08 a标签 img标签详解</a></li>
-      <li><a href="">09 代码注释</a></li>
+      <li v-for="(item,index) in videos" key="index">
+        <a href="" @click.prevent="play(item)">{{item.title}}</a>
+      </li>
     </ul>
     
     
     <!--返回按钮-->
-    <router-link :to="{path:'/video'}" class="iconfont back">&#xe612;</router-link>
+    <a href="" class="iconfont back" @click.prevent="back()">&#xe612;</a>
   
   </div>
 </template>
@@ -43,12 +23,36 @@
 <script>
   export default {
     name: 'Page',
+    mounted() {
+      let lessonId = this.$route.params.lessonId
+      var videos_href = 'http://laravel.dev/api/videos/' + lessonId
+      
+      //TODO 推荐课程
+      this.axios.get(videos_href).then((res) => {
+        console.log(res.data)
+        this.videos = res.data.data;
+        this.current = res.data.data[0]
+      })
+    },
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        current: {}, //TODO 当前视频
+        videos: [], //TODO 视频列表
+      }
+    },
+    methods: {
+      //TODO 修改视频播放
+      play(video) {
+        //console.log(video)
+        this.current = video
+      },
+      
+      //TODO 返回上级页面
+      back() {
+        console.log(this.$router.back())
       }
     }
-  }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

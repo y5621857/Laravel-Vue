@@ -1,139 +1,26 @@
 <template>
   <div>
     <!--导航条-->
-    <div>
-      <swiper :options="swiperOption">
-        <swiper-slide v-for="(slide,index) in slides" key="index">
-          {{slide.title}}
-        </swiper-slide>
-      </swiper>
-    </div>
+    <swiper :options="swiperOption">
+      <swiper-slide v-for="(tag,index) in tags" key="index">
+        <router-link :to="{name:'Video',params:{tId:tag.id}}">
+          {{tag.name}}
+        </router-link>
+      </swiper-slide>
+    </swiper>
     
     <!--导航条结束-->
     
     <!--视频列表-->
     <ul id="videolist">
-      <li>
-        <router-link :to="{path:'page'}" class="pic">
-          <img src="static/images/5.jpg"/>
-          <span>08:26</span>
+      <li v-for="(item,index) in lessons" key="index">
+        <router-link :to="{name:'Page',params:{lessonId:item.id}}" class="pic">
+          <img :src="item.preview"/>
+          <span>{{item.created_at}}</span>
           <i class="iconfont icon-bofang"></i>
         </router-link>
-        <router-link :to="{path:'page'}" class="title">精准投放与精准消除</router-link>
+        <router-link :to="{name:'Page',params:{lessonId:item.id}}" class="title">{{item.title}}</router-link>
       </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/17.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/18.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/19.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/20.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/21.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/22.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/23.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/17.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/18.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/19.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/20.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/21.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/22.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-      <li>
-        <a href="" class="pic">
-          <img src="static/images/23.jpg"/>
-          <span>08:26</span>
-          <i class="iconfont icon-bofang"></i>
-        </a>
-        <a href="" class="title">精准投放与精准消除</a>
-      </li>
-    
     </ul>
     <!--视频列表结束-->
     
@@ -158,27 +45,51 @@
 </template>
 
 <script>
+  
+  
   export default {
     name: 'Video',
+    mounted() {
+      this.loadData()
+    },
     data() {
       return {
-        slides: [
-          {id: 1, title: 'PHP'},
-          {id: 2, title: 'MySql'},
-          {id: 3, title: 'Lunix'},
-          {id: 4, title: 'Html'},
-          {id: 5, title: 'Css'},
-          {id: 6, title: 'Javascript'},
-        ],
+        tags: [], //TODO 课程标签
+        lessons: [], //TODO 课程视频
         swiperOption: {
+          pagination: '.swiper-pagination',
           slidesPerView: 3,
           paginationClickable: true,
-          spaceBetween: 30,
+          spaceBetween: 0,
           freeMode: true
         }
       }
+    },
+    watch: {
+      '$route'(to, from) {
+        this.loadData()
+      }
+    },
+    methods: {
+      loadData() {
+        let tId = this.$route.params.tId || 0
+        var lesson_href = 'http://laravel.dev/api/lesson/' + tId
+        var tags_href = 'http://laravel.dev/api/tags'
+        
+        //TODO 标签列表
+        this.axios.get(tags_href).then((res) => {
+          //console.log(res.data)
+          this.tags = res.data.data;
+        })
+        
+        //TODO 课程列表
+        this.axios.get(lesson_href).then((res) => {
+          //console.log(res.data)
+          this.lessons = res.data.data
+        })
+      }
     }
-  }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -214,7 +125,7 @@
   .swiper-slide {
     float: left;
     width: 30%;
-    text-align: center;
+    /*text-align: center;*/
     line-height: 3em;
     font-size: 3.5vw;
     color: white;

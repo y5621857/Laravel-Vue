@@ -7,12 +7,19 @@ import router from './router'
 Vue.config.productionTip = false
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 Vue.use(VueAwesomeSwiper)
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })

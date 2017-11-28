@@ -14,11 +14,11 @@ export default new Router({
       name: 'Home',
       component: Home
     },{
-      path: '/video',
+      path: '/video/:tId?',
       name: 'Video',
       component: Video
     },{
-      path: '/page',
+      path: '/page/:lessonId',
       name: 'Page',
       component: Page
     },

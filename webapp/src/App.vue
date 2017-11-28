@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition enter-active-class="animated jello">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  export default {
+    name: 'app'
+  }
 </script>
 
 <style>
-#app {
-
-}
 </style>
